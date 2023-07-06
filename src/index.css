@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.glass-bg {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  backdrop-filter: blur(10px);
+
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  animation: shine 1.5s infinite alternate;
+}
