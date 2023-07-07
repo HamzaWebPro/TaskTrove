@@ -58,6 +58,7 @@ const Authentication = () => {
 
         }
         if(response.data.message){
+          setLogin(false)
           toast(response.data.message);
           setSignupData({
             name: "",
