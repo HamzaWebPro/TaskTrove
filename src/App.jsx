@@ -22,8 +22,6 @@ const App = () => {
     <>
       <div className="content !p-5 text-white !font-rale">
         {/* Your component content goes here */}
-
-        
         <RouterProvider router={router} />
       </div>
 
