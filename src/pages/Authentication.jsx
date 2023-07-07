@@ -49,7 +49,7 @@ const Authentication = () => {
     const { confirmPassword, ...dataToSend } = signupData;
     // Send signupData to localhost:3000 using Axios
     axios
-      .post("http://localhost:3000/auth/registration", dataToSend)
+      .post("https://testingtodo.onrender.com/auth/registration", dataToSend)
       .then((response) => {
         // Handle response
         console.log(response.data);
