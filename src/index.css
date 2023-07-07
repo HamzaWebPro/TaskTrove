@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .glass-bg {
   background: linear-gradient(
     to right,
@@ -13,4 +12,25 @@
 
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   animation: shine 1.5s infinite alternate;
+}
+
+/* remove scrollbar */
+/* width */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  display: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  display: none;
 }

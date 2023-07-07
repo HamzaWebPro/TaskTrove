@@ -1,15 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiBell, FiLogOut } from "react-icons/fi";
-import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { activeUser } from "../Slices/userSlice";
 
 const Navs = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  let data = useSelector((state) => state);
+  let navigate = useNavigate();
+let  disp = useDispatch();
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  useEffect(() => {
+    if (!data.userData.userInfo) {
+      navigate("/");
+    }
+  }, []);
+
+  let logout = () => {
+    localStorage.removeItem("userData");
+    disp(activeUser(null));
+    navigate("/");
+  };
   return (
     <>
       <nav className="glass-bg w-full p-3 flex rounded-2xl items-center justify-between">
@@ -67,9 +82,12 @@ const Navs = () => {
                 </div>
               </div>
             )}
-          </div> 
-          <Link to="/" >
-          <FiLogOut as={"Link"} to="/" className="logout-icon text-[25px] !text-white" />
+          </div>
+          <Link to="/">
+            <FiLogOut
+              onClick={logout}
+              className="logout-icon text-[25px] !text-white"
+            />
           </Link>
         </div>
       </nav>
@@ -120,8 +138,8 @@ const Navs = () => {
           }
           .dropdown {
             position: absolute;
-            top: calc(100% + 30px);
-            right: 0;
+            top: calc(100% + 45px);
+            right: -57px;
             min-width: 280px;
             
            

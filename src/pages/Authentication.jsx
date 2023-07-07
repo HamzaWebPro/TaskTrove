@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { PiSmileyXEyes, PiSmiley } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { activeUser } from "../Slices/userSlice";
 
 const Authentication = () => {
+  let disp = useDispatch();
+
+  let nevigate = useNavigate();
+  let data = useSelector((state) => state);
   const [login, setLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [signupData, setSignupData] = useState({
@@ -15,6 +21,12 @@ const Authentication = () => {
     confirmPassword: "",
     profilePicture: null,
   });
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
+  // signup functionality starts here
 
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
@@ -26,39 +38,32 @@ const Authentication = () => {
       ...prevState,
       [name]: value,
     }));
-    console.log(signupData);
   };
 
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setSignupData((prevState) => ({
-  //     ...prevState,
-  //     profilePicture: file ? file : "",
-  //   }));
-
-  // };
+  const handleLoginInputChange = (e) => {
+    const { name, value } = e.target;
+    setLoginData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   const handleSignup = () => {
     if (signupData.password !== signupData.confirmPassword) {
-      // Passwords do not match, show error message or perform desired action
       toast("Passwords do not match. Please confirm your password again.");
-      return; // Stop execution if passwords do not match
+      return;
     }
 
-    // Exclude confirmPassword from signupData
     const { confirmPassword, ...dataToSend } = signupData;
-    // Send signupData to localhost:3000 using Axios
-    axios
-      .post("https://testingtodo.onrender.com/auth/registration", dataToSend)
-      .then((response) => {
-        // Handle response
-        console.log(response.data);
-        if(response.data.error){
-        return  toast(response.data.error);
 
+    axios
+      .post("http://localhost:3000/auth/registration", dataToSend)
+      .then((response) => {
+        if (response.data.error) {
+          return toast(response.data.error);
         }
-        if(response.data.message){
-          setLogin(false)
+        if (response.data.message) {
+          setLogin(false);
           toast(response.data.message);
           setSignupData({
             name: "",
@@ -68,17 +73,51 @@ const Authentication = () => {
             confirmPassword: "",
             profilePicture: "",
           });
-
         }
-
-
-        // Clear input fields
       })
       .catch((error) => {
-        // Handle error
         console.error(error);
       });
   };
+
+  const handleLogin = () => {
+    const { email, password } = loginData;
+
+    axios
+      .post("http://localhost:3000/auth/login", { email, password })
+      .then((response) => {
+        if (response.data.error) {
+          toast(response.data.error);
+          setLogin(true);
+          return;
+        }
+        if (response.data.message) {
+          const userData = response.data.user;
+          nevigate("/home")
+          localStorage.setItem("userData", JSON.stringify(userData));
+          disp(activeUser(userData));
+          console.log(userData);
+          toast(response.data.message);
+          setLoginData({
+            email: "",
+            password: "",
+          });
+          // Save login data in local storage
+          
+          
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  // redirect to home with data
+  useEffect(() => {
+    if (data.userData.userInfo) {
+      nevigate("/home");
+    }
+  }, []);
+
 
   return (
     <>
@@ -111,6 +150,7 @@ const Authentication = () => {
           </div>
           {login ? (
             // signup form start
+            // ... your existing signup form code
             <div className="flex flex-col gap-y-5">
               {/* signup form */}
               {/* name input */}
@@ -191,12 +231,15 @@ const Authentication = () => {
               </div>
             </div>
           ) : (
-            // login form
+            // login form starts
             <div className="flex flex-col gap-y-5">
               {/* email input */}
               <input
                 type="email"
+                name="email"
                 placeholder="Enter Your Email..."
+                value={loginData.email}
+                onChange={handleLoginInputChange}
                 className="glass-bg w-full !p-[15px] !md:p-[30px] !pr-[70px] border-none !font-rale outline-none rounded-3xl text-white"
               />
               {/* password input */}
@@ -209,17 +252,20 @@ const Authentication = () => {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
+                  name="password"
                   placeholder="Enter Your Password..."
+                  value={loginData.password}
+                  onChange={handleLoginInputChange}
                   className="glass-bg w-full !p-[15px] !md:p-[30px] !pr-[70px] border-none outline-none rounded-3xl text-white"
                 />
               </div>
               {/* login button */}
-              <Link
-                to="/home"
+              <div
+                onClick={handleLogin}
                 className={` rounded-2xl   hover:!bg-white hover:!text-colorprimary selection:bg-transparent !text-white  py-2 text-center !font-rale font-semibold bg-colorprimary duration-300`}
               >
                 Login
-              </Link>
+              </div>
               <span>
                 Forgot Password?{" "}
                 <span className="text-colorprimary font-semibold">
@@ -227,6 +273,7 @@ const Authentication = () => {
                 </span>
               </span>
             </div>
+            // login form end
           )}
         </div>
         <div className="p-10 w-full text-transparent"></div>

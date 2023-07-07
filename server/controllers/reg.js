@@ -50,3 +50,6 @@ async function registration(req, res) {
 }
 
 module.exports = registration;
+
+
+
