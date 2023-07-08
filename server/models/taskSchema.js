@@ -18,6 +18,10 @@ const taskSchema = new Schema({
   created:{
     type:Date,
     default:Date.now()
+  },
+  isComplete:{
+    type:Boolean,
+    default:false
   }
 });
 

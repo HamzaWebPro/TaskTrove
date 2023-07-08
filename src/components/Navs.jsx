@@ -27,7 +27,7 @@ let  disp = useDispatch();
   };
   return (
     <>
-      <nav className="glass-bg w-full p-3 flex rounded-2xl items-center justify-between">
+      <nav className="glass-bg w-[97%] p-3 flex rounded-2xl fixed left-[50%] z-2 translate-x-[-50%] items-center justify-between">
         <h3 className="!m-0 !p-0">TaskTrove.</h3>
         <div className="flex gap-x-4">
           <div className="relative">
