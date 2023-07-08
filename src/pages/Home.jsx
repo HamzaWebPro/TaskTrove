@@ -57,9 +57,9 @@ const Home = () => {
           location.reload();
         }, [3000]);
         if (response.data.error) {
-          toast.error(response.data.error);
+          return response.data.error;
         } else {
-          toast.success(response.data.message);
+          return toast.success(response.data.message);
           setTaskData({
             title: "",
             task: "",
@@ -202,13 +202,14 @@ const Home = () => {
     // Send a POST request to the backend API to complete the task
     axios
       .post("http://localhost:3000/task/completeTask", {
-        taskId: completeId,
+        taskId: completeId
       })
       .then((response) => {
         setTimeout(() => {
           location.reload();
         }, 3000);
         if (response.data.error) {
+          console.log(response.data);
           toast(response.data.error);
         } else {
           toast(response.data.message);
@@ -245,13 +246,19 @@ const Home = () => {
 
   // get all completed data
   let [completeTasks, setCompleteTasks] = useState("");
+
+
   useEffect(() => {
+    const taskby = data.userData.userInfo._id; // Replace "your_user_id" with the actual user ID
+
     axios
-      .get("http://localhost:3000/task/getCompletedTask")
+      .post("http://localhost:3000/task/getCompletedTask", { taskby })
       .then((response) => {
         const completedTasks = response.data;
+        console.log(completedTasks, "ct");
         // Handle the completed tasks data as needed
         setCompleteTasks(completedTasks);
+        console.log(completeTasks,"why");
       })
       .catch((error) => {
         console.log("Error fetching completed tasks.");
@@ -285,6 +292,7 @@ const Home = () => {
 
     fetchData();
   }, []);
+  
 
   return (
     <>
@@ -328,7 +336,9 @@ const Home = () => {
               </div>
               <div className="mt-1">
                 <small className="font-semibold">
-                  Completed Tasks - {completeTasks.length}
+                  Completed Tasks -{" "}
+                  {completeTasks.length}
+                  
                 </small>{" "}
               </div>
               <div className="mt-1">
@@ -398,7 +408,7 @@ const Home = () => {
                 </h6>
                 <small>{task.task}</small>
                 <small className="text-[12px] text-[#ffffff7d]">
-                  {task.created}{" "}
+                  {task.created}{" "}{"  "}&nbsp; &nbsp;
                   <span
                     className={`${
                       task.isComplete ? "text-green-500" : "text-red-500"

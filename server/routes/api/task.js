@@ -20,7 +20,7 @@ _.post("/getlastindex",getLastIndex)
 _.post("/completeTask",completeTask)
 _.post("/unCompleteTask",unCompleteTask)
 _.post("/updateTaskIndex",updateEditIndex)
-_.get("/getCompletedTask",getCompletedTasks)
+_.post("/getCompletedTask",getCompletedTasks)
 
 
 

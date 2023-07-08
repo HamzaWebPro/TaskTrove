@@ -14,7 +14,7 @@ const addTask = async (req, res) => {
   }
 
   // Check if taskTitle has more than 20 characters
-  if (title.length > 20) {
+  if (title.length > 30) {
     return res
       .status(400)
       .json({ error: "Task title should be less than or equal to 20 characters." });

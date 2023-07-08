@@ -2,8 +2,10 @@ const Task = require("../models/taskSchema");
 
 const getCompletedTasks = async (req, res) => {
   try {
-    // Find all tasks where isComplete is true
-    const completedTasks = await Task.find({ isComplete: true });
+    const { taskby } = req.body; // Assuming the user ID is sent in the request body
+
+    // Find all tasks where userId matches and isComplete is true
+    const completedTasks = await Task.find({ taskby, isComplete: true });
 
     res.status(200).json(completedTasks);
   } catch (error) {
