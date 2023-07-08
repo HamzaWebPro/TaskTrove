@@ -53,7 +53,9 @@ const Home = () => {
     axios
       .post("http://localhost:3000/task/addTask", taskData)
       .then((response) => {
-        location.reload();
+        setTimeout(() => {
+          location.reload();
+        }, [3000]);
         if (response.data.error) {
           toast.error(response.data.error);
         } else {
@@ -282,7 +284,7 @@ const Home = () => {
     };
 
     fetchData();
-  }, [userId]);
+  }, []);
 
   return (
     <>
@@ -304,7 +306,7 @@ const Home = () => {
         <div className="w-full md:w-[30%] h-[300px] order-0 flex gap-x-5 p-4 glass-bg rounded-2xl">
           <div className="w-[40%]  h-[100%] rounded-2xl ">
             <img
-              src="https://i.postimg.cc/dtgCXGbq/Hamza-photo.jpg"
+              src="https://i.postimg.cc/y8LLRyjy/2289-Sk-VNQSBGQU1-PIDEw-Mjgt-MTIy.jpg"
               className="w-full glass-bg p-1 h-auto rounded-2xl"
               alt=""
             />
@@ -319,29 +321,28 @@ const Home = () => {
               {data.userData.userInfo.email}{" "}
             </small>
             <div className="text-[14px]">
-            <div className="mt-3">
-              <small className="font-semibold">
-                Total Tasks - {tasks.length}
-              </small>{" "}
+              <div className="mt-3">
+                <small className="font-semibold">
+                  Total Tasks - {tasks.length}
+                </small>{" "}
+              </div>
+              <div className="mt-1">
+                <small className="font-semibold">
+                  Completed Tasks - {completeTasks.length}
+                </small>{" "}
+              </div>
+              <div className="mt-1">
+                <small className="font-semibold">
+                  Incomplete Tasks -{" "}
+                  {Math.abs(completeTasks.length - tasks.length)}
+                </small>{" "}
+              </div>
+              <div className="mt-1">
+                <small className="font-semibold">
+                  Last Edited Tasks - {lastIndex}
+                </small>{" "}
+              </div>
             </div>
-            <div className="mt-1">
-              <small className="font-semibold">
-                Completed Tasks - {completeTasks.length}
-              </small>{" "}
-            </div>
-            <div className="mt-1">
-              <small className="font-semibold">
-                Incomplete Tasks -{" "}
-                {Math.abs(completeTasks.length - tasks.length)}
-              </small>{" "}
-            </div>
-            <div className="mt-1">
-              <small className="font-semibold">
-              Last Edited Tasks - {lastIndex}
-              </small>{" "}
-            </div>
-            </div>
-
           </div>
         </div>
         {/* Task items */}

@@ -13,6 +13,9 @@ const Authentication = () => {
   let data = useSelector((state) => state);
   const [login, setLogin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+
   const [signupData, setSignupData] = useState({
     name: "",
     email: "",
@@ -30,6 +33,12 @@ const Authentication = () => {
 
   const handleClickShowPassword = () => {
     setShowPassword((show) => !show);
+  };
+  const handleClickShowPassword1 = () => {
+    setShowPassword1((show) => !show);
+  };
+  const handleClickShowPassword2 = () => {
+    setShowPassword2((show) => !show);
   };
 
   const handleInputChange = (e) => {
@@ -183,13 +192,13 @@ const Authentication = () => {
               {/* password input */}
               <div className="relative w-full cursor-pointer selection:bg-transparent">
                 <div
-                  onClick={handleClickShowPassword}
+                  onClick={handleClickShowPassword1}
                   className="absolute z-10 right-5 top-[50%] translate-y-[-50%] text-[35px] text-white hover:cursor-pointer"
                 >
-                  {showPassword ? <PiSmiley /> : <PiSmileyXEyes />}
+                  {showPassword1 ? <PiSmiley /> : <PiSmileyXEyes />}
                 </div>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword1 ? "text" : "password"}
                   name="password"
                   placeholder="Enter a Password*"
                   value={signupData.password}
@@ -200,13 +209,13 @@ const Authentication = () => {
               {/* confirm password input */}
               <div className="relative w-full cursor-pointer selection:bg-transparent">
                 <div
-                  onClick={handleClickShowPassword}
+                  onClick={handleClickShowPassword2}
                   className="absolute z-10 right-5 top-[50%] translate-y-[-50%] text-[35px] text-white hover:cursor-pointer"
                 >
-                  {showPassword ? <PiSmiley /> : <PiSmileyXEyes />}
+                  {showPassword2 ? <PiSmiley /> : <PiSmileyXEyes />}
                 </div>
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword2 ? "text" : "password"}
                   name="confirmPassword"
                   placeholder="Confirm Password*"
                   value={signupData.confirmPassword}
