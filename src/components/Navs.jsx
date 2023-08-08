@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FiBell, FiLogOut } from "react-icons/fi";
+import { FiBell, FiLogOut, FiUser } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { activeUser } from "../Slices/userSlice";
@@ -30,6 +30,7 @@ let  disp = useDispatch();
       <nav className="glass-bg w-[97%] p-3 flex rounded-2xl fixed left-[50%] z-2 translate-x-[-50%] items-center justify-between">
         <h3 className="!m-0 !p-0">TaskTrove.</h3>
         <div className="flex gap-x-4">
+            <FiUser className="text-[25px]"/>
           <div className="relative">
             <div className="notification-badge"></div>
             <FiBell

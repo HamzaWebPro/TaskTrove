@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navs from "../components/Navs";
 import { useSelector } from "react-redux";
 import { BsChevronDoubleDown, BsThreeDotsVertical } from "react-icons/bs";
+import { IoPersonAdd, IoAddCircleOutline } from "react-icons/io5";
 import {
   MdOutlineDownloadDone,
   MdOutlineEditNote,
@@ -24,6 +25,7 @@ const Home = () => {
   const [tasks, setTasks] = useState([]);
   const [edit, setEdit] = useState(false);
   const [editId, setEditId] = useState("");
+  let [assignButton, setAssignButton] = useState(false);
 
   const handleDropShow = (index) => {
     setShowIndex(index === showIndex ? null : index);
@@ -202,7 +204,7 @@ const Home = () => {
     // Send a POST request to the backend API to complete the task
     axios
       .post("http://localhost:3000/task/completeTask", {
-        taskId: completeId
+        taskId: completeId,
       })
       .then((response) => {
         setTimeout(() => {
@@ -247,7 +249,6 @@ const Home = () => {
   // get all completed data
   let [completeTasks, setCompleteTasks] = useState("");
 
-
   useEffect(() => {
     const taskby = data.userData.userInfo._id; // Replace "your_user_id" with the actual user ID
 
@@ -258,7 +259,7 @@ const Home = () => {
         console.log(completedTasks, "ct");
         // Handle the completed tasks data as needed
         setCompleteTasks(completedTasks);
-        console.log(completeTasks,"why");
+        console.log(completeTasks, "why");
       })
       .catch((error) => {
         console.log("Error fetching completed tasks.");
@@ -292,7 +293,19 @@ const Home = () => {
 
     fetchData();
   }, []);
-  
+  // get users
+  let [allUsers, setAllUsers] = useState();
+  useEffect(() => {
+    axios.get("http://localhost:3000/auth/getUsers").then((response) => {
+      setAllUsers(response.data);
+      console.log(response.data);
+    });
+  }, []);
+
+  // taskitem assign button
+  let handleassign = () => {
+    setAssignButton((prev) => !prev);
+  };
 
   return (
     <>
@@ -336,9 +349,7 @@ const Home = () => {
               </div>
               <div className="mt-1">
                 <small className="font-semibold">
-                  Completed Tasks -{" "}
-                  {completeTasks.length}
-                  
+                  Completed Tasks - {completeTasks.length}
                 </small>{" "}
               </div>
               <div className="mt-1">
@@ -403,12 +414,18 @@ const Home = () => {
                       >
                         <MdDeleteOutline />
                       </div>
+                      <div
+                        onClick={() => handleassign(task)}
+                        className="text-[20px] w-[30px] h-[30px] shadow-md text-white bg-colorprimary duration-300 flex justify-center items-center rounded-full hover:bg-white hover:!text-colorprimary"
+                      >
+                        <IoPersonAdd />
+                      </div>
                     </div>
                   )}
                 </h6>
                 <small>{task.task}</small>
                 <small className="text-[12px] text-[#ffffff7d]">
-                  {task.created}{" "}{"  "}&nbsp; &nbsp;
+                  {task.created} {"  "}&nbsp; &nbsp;
                   <span
                     className={`${
                       task.isComplete ? "text-green-500" : "text-red-500"
@@ -470,6 +487,44 @@ const Home = () => {
                 >
                   <MdOutlineDownloadDone />
                 </div>
+              )}
+            </div>
+          </div>
+          <div className="   p-4 glass-bg rounded-2xl">
+            <h5 className=" m-0 p-0 gap-x-2 mb-4">Tasktrove Users</h5>
+            <div className="h-[500px] w-full overflow-y-scroll">
+              {allUsers ? (
+                allUsers.map((item) => (
+                  <div className="flex mb-3 relative glass-bg rounded-xl p-3 w-full items-center">
+                    <div className=" w-[80px] h-[80px] p-2">
+                      <img
+                        src="https://i.postimg.cc/y8LLRyjy/2289-Sk-VNQSBGQU1-PIDEw-Mjgt-MTIy.jpg"
+                        className="  h-auto rounded-2xl"
+                        alt=""
+                      />
+                    </div>
+                    <div className="">
+                      <h6 className="!m-0 !p-0">{item.name}</h6>
+                      <small className="text-[12px] !m-0 !p-0">
+                        {item.profession}
+                      </small>
+                      <br />
+                      <small className="text-[10px] text-colorprimary font-semibold">
+                        {item.email}
+                      </small>
+                    </div>
+                    {assignButton && (
+                      <div
+                        onClick={() => handleassign()}
+                        className="text-[20px] absolute top-[50%] translate-y-[-50%] right-3 w-[30px] h-[30px] shadow-md text-white bg-colorprimary duration-300 flex justify-center items-center rounded-full hover:bg-white hover:!text-colorprimary"
+                      >
+                        <IoAddCircleOutline />
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="">Loading users.....</div>
               )}
             </div>
           </div>
